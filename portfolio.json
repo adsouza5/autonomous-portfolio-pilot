@@ -1,0 +1,14 @@
+#Example portfolio, edit it to your preference or your portfolio
+
+{
+  "AAPL": 20,
+  "MSFT": 15,
+  "GOOGL": 10,
+  "AMZN": 5,
+  "TSLA": 8,
+  "NVDA": 12,
+  "JPM": 25,
+  "V": 18,
+  "JNJ": 14,
+  "DIS": 10
+}
