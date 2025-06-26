@@ -29,7 +29,6 @@ def fetch_historical(symbol, days=30):
     return hist['Close']
 
 # Optimization
-
 def compute_optimal_weights(historical_prices, risk_aversion=0.5):
     returns = historical_prices.pct_change().dropna()
     mu = returns.mean()
@@ -62,11 +61,17 @@ if __name__ == "__main__":
         axis=1, keys=symbols
     )
 
+    # Clean data: fill short gaps, drop any tickers with missing history
+    hist = hist.ffill().dropna(axis=1, how='any')
+    symbols = list(hist.columns)
+    # Re-fetch current prices for valid symbols
+    current_prices = fetch_current_prices(symbols)
+
     # Compute weights
     target_weights = compute_optimal_weights(hist, risk_aversion=0.5)
-    total_value = sum(current_prices[s]*portfolio[s] for s in symbols)
+    total_value = sum(current_prices[s]*portfolio.get(s, 0) for s in symbols)
     current_weights = {
-        s: (current_prices[s]*portfolio[s]) / total_value
+        s: (current_prices[s]*portfolio.get(s, 0)) / total_value
         for s in symbols
     }
 
@@ -74,8 +79,13 @@ if __name__ == "__main__":
     trades = []
     print("\nProposed orders (dry run):")
     for s in symbols:
-        delta_w = target_weights[s] - current_weights[s]
-        shares = round(delta_w * total_value / current_prices[s])
+        price = current_prices.get(s, np.nan)
+        delta_w = target_weights.get(s, 0) - current_weights.get(s, 0)
+        # Skip if data missing
+        if np.isnan(price) or np.isnan(delta_w):
+            print(f"Skipping {s} due to missing data")
+            continue
+        shares = round(delta_w * total_value / price)
         if shares > 0:
             line = f"BUY  {shares} shares of {s}"
         elif shares < 0:
@@ -88,7 +98,7 @@ if __name__ == "__main__":
     if not trades:
         print("  (No trades needed.)")
 
-    # LLM Explanation 
+    # LLM Explanation
     prompt = (
         f"I have a portfolio: {portfolio}\n"
         f"Current prices: {current_prices}\n"
@@ -98,14 +108,16 @@ if __name__ == "__main__":
     )
 
     resp = client.chat.completions.create(
-    model="gpt-4",
-    messages=[{"role":"system","content":"You are a helpful financial assistant."},
-            {"role":"user","content":prompt} ],
-    max_tokens=250
-)
+        model="gpt-4",
+        messages=[
+            {"role":"system","content":"You are a helpful financial assistant."},
+            {"role":"user","content":prompt}
+        ],
+        max_tokens=250
+    )
 
     explanation = resp.choices[0].message.content.strip()
 
     print("\nLLM Explanation:")
     print(explanation)
-    print("\nDone.")
+    print("\nFeel free to make changes to the portfolio.json file and run the script again.")
