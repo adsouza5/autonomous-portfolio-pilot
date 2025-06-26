@@ -48,7 +48,7 @@ This project demonstrates an end-to-end agentic AI loop (Perceive → Reason →
    OPENAI_API_KEY=sk-your-openai-key
    ```
 
-Have already provided a .env file for you to edit.
+   Have already provided a .env file for you to edit.
 
 3. **Customize your portfolio**:
 
