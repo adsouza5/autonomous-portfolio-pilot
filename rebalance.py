@@ -98,10 +98,10 @@ if __name__ == "__main__":
     )
 
     resp = client.chat.completions.create(
-    model="gpt-3.5-turbo",
+    model="gpt-4",
     messages=[{"role":"system","content":"You are a helpful financial assistant."},
             {"role":"user","content":prompt} ],
-    max_tokens=100
+    max_tokens=250
 )
 
     explanation = resp.choices[0].message.content.strip()
