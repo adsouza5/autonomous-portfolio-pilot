@@ -41,12 +41,14 @@ This project demonstrates an end-to-end agentic AI loop (Perceive → Reason →
    ```
 
 2. **Create your environment file**:
-
+   
    In the project root, create a file named `.env` and add:
 
    ```dotenv
    OPENAI_API_KEY=sk-your-openai-key
    ```
+
+Have already provided a .env file for you to edit.
 
 3. **Customize your portfolio**:
 
