@@ -36,8 +36,8 @@ This project demonstrates an end-to-end agentic AI loop (Perceive → Reason →
 1. **Clone the repository**:
 
    ```bash
-   git clone https://github.com/<your-username>/robo-advisor-mvp.git
-   cd robo-advisor-mvp
+   git clone https://github.com/<your-username>/autonomous-portfolio-pilot.git
+   cd autonomous-portfolio-pilot
    ```
 
 2. **Create your environment file**:
@@ -102,17 +102,17 @@ This will:
 1. **Build the Docker image**:
 
    ```bash
-   docker build -t robo-advisor-mvp .
+   docker build -t autonomous-portfolio-pilot .
    ```
 
 2. **Run the container**:
 
    ```bash
    # Option 1: use your .env file
-   docker run --rm --env-file .env -v "${PWD}:/app" -w /app robo-advisor-mvp
+   docker run --rm --env-file .env -v "${PWD}:/app" -w /app autonomous-portfolio-pilot
 
    # Option 2: inject the key directly (PowerShell)
-   docker run --rm -e "OPENAI_API_KEY=$Env:OPENAI_API_KEY" -v "${PWD}:/app" -w /app robo-advisor-mvp
+   docker run --rm -e "OPENAI_API_KEY=$Env:OPENAI_API_KEY" -v "${PWD}:/app" -w /app autonomous-portfolio-pilot
    ```
 
 Mounting the current directory (`-v "${PWD}:/app"`) ensures your updated `portfolio.json` is used without rebuilding.
